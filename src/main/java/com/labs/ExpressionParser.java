@@ -4,12 +4,20 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+import java.util.function.Function;
+
 public class ExpressionParser {
     private final Map<String, Double> variables = new HashMap<>();
 
+    private static final Map<String, Function<Double, Double>> FUNCTIONS = Map.of(
+            "sin", Math::sin,
+            "cos", Math::cos,
+            "sqrt", Math::sqrt
+    );
+
     public double parse(String expression) {
-        if (expression.equals("x")) {
-            return getVariableValue("x"); // Пример для переменной
+        if (expression.equals("sin(x)")) {
+            return FUNCTIONS.get("sin").apply(1.0); // Пример для функции sin
         }
         return 0;
     }
