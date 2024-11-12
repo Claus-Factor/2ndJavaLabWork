@@ -89,10 +89,16 @@ public class ExpressionParser {
 
 
     public double parse(String expression) {
-        if (expression.equals("sin(x)")) {
-            return FUNCTIONS.get("sin").apply(1.0); // Пример для функции sin
+        try {
+            // Простой пример проверки выражения
+            if (expression.contains("++")) {
+                throw new IllegalArgumentException("Некорректный оператор '++'");
+            }
+            return 0; // Пока ничего не вычисляем
+        } catch (IllegalArgumentException e) {
+            System.out.println("Ошибка: " + e.getMessage());
+            return Double.NaN;
         }
-        return 0;
     }
 
     private double getVariableValue(String variable) {
