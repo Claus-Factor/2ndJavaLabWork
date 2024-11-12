@@ -56,6 +56,37 @@ public class ExpressionParser {
         };
     }
 
+    private List<String> splitExpression(String expression) {
+        List<String> tokens = new ArrayList<>();
+        StringBuilder token = new StringBuilder();
+
+        for (int i = 0; i < expression.length(); i++) {
+            char c = expression.charAt(i);
+
+            if (Character.isWhitespace(c)) continue;
+
+            if (Character.isDigit(c) || c == '.') {
+                token.append(c);
+            } else if (Character.isLetter(c)) {
+                token.append(c);
+            } else {
+                if (token.length() > 0) {
+                    tokens.add(token.toString());
+                    token.setLength(0);
+                }
+                if ("+-*/^()".indexOf(c) >= 0) {
+                    tokens.add(String.valueOf(c));
+                }
+            }
+        }
+
+        if (token.length() > 0) {
+            tokens.add(token.toString());
+        }
+
+        return tokens;
+    }
+
 
     public double parse(String expression) {
         if (expression.equals("sin(x)")) {
