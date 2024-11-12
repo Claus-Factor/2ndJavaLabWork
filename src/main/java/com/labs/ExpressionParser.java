@@ -15,6 +15,17 @@ public class ExpressionParser {
             "sqrt", Math::sqrt
     );
 
+    private double applyOperator(String operator, double a, double b) {
+        return switch (operator) {
+            case "+" -> a + b;
+            case "-" -> a - b;
+            case "*" -> a * b;
+            case "/" -> a / b;
+            case "^" -> Math.pow(a, b);
+            default -> throw new IllegalArgumentException("Неизвестный оператор: " + operator);
+        };
+    }
+
     public double parse(String expression) {
         if (expression.equals("sin(x)")) {
             return FUNCTIONS.get("sin").apply(1.0); // Пример для функции sin
