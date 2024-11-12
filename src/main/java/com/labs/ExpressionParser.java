@@ -5,14 +5,25 @@ import java.util.function.Function;
 
 /**
  * Класс для парсинга и вычисления математических выражений, поддерживающий переменные и функции.
+ * <p>
+ * Поддерживаемые операции:
+ * <ul>
+ *     <li>Арифметические операции: +, -, *, /, ^</li>
+ *     <li>Функции: sin, cos, sqrt</li>
+ *     <li>Переменные: могут быть заданы в виде Map с их значениями</li>
+ * </ul>
+ * @author Николай Вольхин (8 группа, 3 курс)
  */
 public class ExpressionParser {
+
+    /** Словарь функций, доступных для использования в выражениях. */
     private static final Map<String, Function<Double, Double>> FUNCTIONS = Map.of(
             "sin", Math::sin,
             "cos", Math::cos,
             "sqrt", Math::sqrt
     );
 
+    /** Словарь значений переменных, используемых в выражении. */
     private final Map<String, Double> variables;
 
     /**
@@ -29,6 +40,7 @@ public class ExpressionParser {
      *
      * @param expression математическое выражение в виде строки
      * @return результат вычисления
+     * @throws IllegalArgumentException если выражение некорректно
      */
     public double parse(String expression) {
         try {
@@ -40,6 +52,13 @@ public class ExpressionParser {
         }
     }
 
+    /**
+     * Разделяет выражение на токены.
+     * В контексте проекта токен - это минимальная смысловая единица, на основе которой происходит разбор математического выражения.
+     *
+     * @param expression строка выражения
+     * @return список токенов
+     */
     private List<String> splitExpression(String expression) {
         List<String> tokens = new ArrayList<>();
         StringBuilder token = new StringBuilder();
@@ -71,6 +90,12 @@ public class ExpressionParser {
         return tokens;
     }
 
+    /**
+     * Преобразует список токенов в обратную польскую нотацию (ОПН).
+     *
+     * @param tokens список токенов
+     * @return список токенов в ОПН
+     */
     private List<String> toPostfix(List<String> tokens) {
         List<String> output = new ArrayList<>();
         Stack<String> stack = new Stack<>();
@@ -107,6 +132,12 @@ public class ExpressionParser {
         return output;
     }
 
+    /**
+     * Вычисляет значение выражения в ОПН.
+     *
+     * @param postfix список токенов в ОПН
+     * @return результат вычисления
+     */
     private double parsePostfix(List<String> postfix) {
         Stack<Double> stack = new Stack<>();
 
@@ -128,6 +159,12 @@ public class ExpressionParser {
         return stack.pop();
     }
 
+    /**
+     * Проверяет, является ли токен числом.
+     *
+     * @param token токен
+     * @return true, если токен — число
+     */
     private boolean isNumber(String token) {
         try {
             Double.parseDouble(token);
@@ -137,18 +174,44 @@ public class ExpressionParser {
         }
     }
 
+    /**
+     * Проверяет, является ли токен функцией.
+     *
+     * @param token токен
+     * @return true, если токен — функция
+     */
     private boolean isFunction(String token) {
         return FUNCTIONS.containsKey(token);
     }
 
+    /**
+     * Проверяет, является ли токен оператором.
+     *
+     * @param token токен
+     * @return true, если токен — оператор
+     */
     private boolean isOperator(String token) {
         return "+-*/^".contains(token);
     }
 
+    /**
+     * Проверяет, является ли токен переменной.
+     *
+     * @param token токен
+     * @return true, если токен — переменная
+     */
     private boolean isVariable(String token) {
         return Character.isLetter(token.charAt(0)) && !isFunction(token);
     }
 
+    /**
+     * Применяет оператор к двум значениям.
+     *
+     * @param operator оператор
+     * @param a первое значение
+     * @param b второе значение
+     * @return результат операции
+     */
     private double applyOperator(String operator, double a, double b) {
         return switch (operator) {
             case "+" -> a + b;
@@ -160,6 +223,12 @@ public class ExpressionParser {
         };
     }
 
+    /**
+     * Определяет приоритет оператора.
+     *
+     * @param operator оператор
+     * @return приоритет оператора
+     */
     private int precedence(String operator) {
         return switch (operator) {
             case "+", "-" -> 1;
@@ -168,6 +237,4 @@ public class ExpressionParser {
             default -> 0;
         };
     }
-
 }
-
