@@ -8,6 +8,13 @@
     <artifactId>parser</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <repositories>
+        <repository>
+            <id>2ndJavaLabWork</id>
+            <url>https://github.com/Claus-Factor/2ndJavaLabWork</url>
+        </repository>
+    </repositories>
+
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
