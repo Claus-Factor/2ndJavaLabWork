@@ -2,6 +2,7 @@ package com.labs;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Класс ExpressionParser создан.");
+        ExpressionParser parser = new ExpressionParser();
+        System.out.println("Результат: " + parser.parse("x"));
     }
 }
